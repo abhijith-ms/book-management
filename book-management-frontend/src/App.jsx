@@ -6,13 +6,16 @@ const App = () => {
   const [formData, setFormData] = useState({ title: '', author: '', year: '' });
   const [editBookId, setEditBookId] = useState(null);
 
+  // Use the Render backend URL
+  const API_URL = 'https://book-management-backend-lr6o.onrender.com';
+
   useEffect(() => {
     fetchBooks();
   }, []);
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get('https://book-management-ul3a.onrender.com/api/books');
+      const response = await axios.get(`${API_URL}/api/books`);
       setBooks(response.data);
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -29,16 +32,16 @@ const App = () => {
     // Check if any field is empty
     if (!formData.title || !formData.author || !formData.year) {
       alert('Please fill in all the boxes!');
-      return; // Stop the function if any field is empty
+      return;
     }
 
     try {
       if (editBookId) {
         // Update an existing book
-        await axios.put(`https://book-management-ul3a.onrender.com/api/books/${editBookId}`, formData);
+        await axios.put(`${API_URL}/api/books/${editBookId}`, formData);
       } else {
         // Add a new book
-        await axios.post('https://book-management-ul3a.onrender.com/api/books', formData);
+        await axios.post(`${API_URL}/api/books`, formData);
       }
       fetchBooks(); // Refresh the book list
       setFormData({ title: '', author: '', year: '' }); // Clear the form
@@ -55,7 +58,7 @@ const App = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://book-management-ul3a.onrender.com/api/books/${id}`);
+      await axios.delete(`${API_URL}/api/books/${id}`);
       fetchBooks(); // Refresh the book list
     } catch (error) {
       console.error('Error deleting book:', error);

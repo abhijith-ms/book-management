@@ -19,18 +19,22 @@ const writeData = (data) => {
 const server = http.createServer((req, res) => {
   const { method, url } = req;
 
-  res.setHeader('Access-Control-Allow-Origin', '*'); 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); 
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); 
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  // Handle preflight requests
   if (method === 'OPTIONS') {
-    res.statusCode = 204; 
+    res.statusCode = 204;
     res.end();
     return;
   }
 
+  // Set response content type
   res.setHeader('Content-Type', 'application/json');
 
+  // Handle API routes
   if (url === '/api/books' && method === 'GET') {
     const books = readData();
     res.statusCode = 200;
